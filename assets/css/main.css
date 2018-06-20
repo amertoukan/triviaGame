@@ -1,0 +1,73 @@
+body{
+	background: url('../images/triviaNight.jpeg');
+	font-family: 'Raleway', sans-serif;
+    font-size: 25px;
+    text-align: center;
+}
+
+header{
+    margin-bottom: 20px;
+}
+
+.btn-primary,.reset{
+	background-color: #313477;
+	color: white;
+	font-family: 'Sigmar One', sans-serif;
+	font-size: 50px;
+	padding: 20px;
+	margin-top: 100px;
+}
+.btn-primary:hover, .reset:hover{
+    background-color: white;
+    color: #313477
+}
+
+.container{
+	margin-top: 50px;
+	text-align: center;
+	height: 100%;
+	width: 700px;
+}
+
+h2, #message, #finalMessage{
+	font-family: Sigmar One;
+}
+#timeLeft{
+    color:white;
+}
+#currentQuestion{
+    color:white;
+}
+.question{
+    color:white;
+}
+.answerList{
+    color:white;
+    margin-bottom:50px;
+}
+.thisChoice:hover{
+	background-color: #202364;
+	color: white;
+    padding: 10px;
+    font-size:1.5em;
+}
+#message{
+    color:rgb(243, 221, 221);
+    text-align:center;
+}
+#correctedAnswer{
+    color:white;
+}
+#gif{
+	margin: 30px;
+}
+.scoreboard{
+    color:white;
+}
+@media screen and (max-width:640px){
+	.container{
+		width: 500px;
+		margin-top: 200px;
+		size: 200%;
+	}	
+}

@@ -27,7 +27,7 @@ var triviaQuestions = [{
     answerList: ["94-95","95-96","96-97","97-98"],
     answer: 1
 },{
-    question: "When did the Toronto Maple Leafs win the Stanley Cup?",
+    question: "When did the Toronto Maple Leafs last win the Stanley Cup?",
     answerList: ["1965","1966","1967","1968"],
     answer: 2
 },{
@@ -42,75 +42,77 @@ var triviaQuestions = [{
     question:"Who is the premier of Ontario?",
     answerList: ["Andrea Horwath","Donald Trump","Doug Ford","Justin Trudeau"],
     answer: 2
-}]
-var array = ["Question 1", "Question 2","Question 3", "Question 4","Question 5", "Question 6", "Question 7", "Question 8", "Question 9", "Question 10"]
-var i;
-var correct; 
-var incorrect;
-var answered; 
-var unanswered; 
-var time; 
-var seconds; 
-var userSelect;
+}];
+
+var gifArray = ["question1", "question2","question3", "question4","question5", "question6", "question7", "question8", "question9", "question10","question11"];
+var currentQuestion; var correct; var incorrect; var answered; 
+var unanswered; var time; var seconds; var userSelect;
+
 var alert={
 correct: "Correct!",
-incorrect: "Sorry, that was the wrong answer.",
+incorrect: "This is the wrong answer, the right answer is: ",
 endTime: "Time is up!",
-finished: "Congrats! Let's see your score."
-}
-$("#startBtn").onclick(function(){
+finished: "Now, let us see how well (or bad) you did!"
+};
+
+$('#startBtn').on('click',function(){
     $(this).hide();
     startGame();
-})
-$('#startOver').on('click', function(){
-	$(this).hide();
-	newGame();
+});
+$('#startOver').on('click',function(){
+    $(this).hide();
+    startGame();
 });
 function startGame(){
-    $("#message").empty();
+    $("#finalMessage").empty();
     $("#correctAnswer").empty();
     $("#incorrectAnswer").empty();
-    i=0;
-    correct=0;
-    incorrect=0;
-    unanswered=0;
-    newQuestion()
+    $('#unanswered').empty();
+    currentQuestion = 0;
+    correct = 0;
+    incorrect = 0;
+    unanswered = 0;
+    newQuestion();
+}
+
 //new question
 function newQuestion(){
     $("#message").empty();
-    $("#correctAnswer").empty();
+    $("#correctedAnswer").empty();
     $("#gif").empty();
     answered=true;
 
 //reset variables for a new game
 
 //setting up a new question 
-$("#currentQuestion").html('Question #'+(i+1)+"/"+triviaQuestions.length);
-$('.question').html('<h1'+triviaQuestions[i].question+'</h1>');
-for (var x=0; x<4; x++){
+$("#currentQuestion").html('<h4>Question '+(currentQuestion + 1) + "/" + (triviaQuestions.length-1) +'</h4>');
+$('.question').html('<h3>' + triviaQuestions[currentQuestion].question + '</h3>');
+for (var i = 0; i < 4; i++){
     var choices = $('<div>');
-    choices.text(triviaQuestions[i].answerList[x]);
-    choices.attr({'data-index':x});
-    choice.addClass ('thisChoice')
-    $("answerList").append(choices);
+    choices.text(triviaQuestions[currentQuestion].answerList[i]);
+    choices.attr({'data-index': i});
+    choices.addClass ('thisChoice')
+    $(".answerList").append(choices);
 }
+
 countdown(); 
+
 $('.thisChoice').on('click',function(){
     userSelect = $(this).data('index');
     clearInterval(time);
     answerpg();
-});
+    });
 }
 function countdown(){
 	seconds = 15;
-	$('#timeLeft').html('<h2>Time Remaining: ' + seconds + '</h2>');
+	$('#timeLeft').html('<h3>Time Remaining: ' + seconds + '</h3>');
 	answered = true;
 	//sets timer to go down
-	time = setInterval(showCountdown, 1000);
+	time = setInterval(showCounter, 1000);
 }
 function showCounter(){ 
-    seconds--; 
-    $("#timeRem").html('<h2> Time Remaining: '+ seconds + '</h2>');
+    seconds --; 
+    $("#timeLeft").html('<h3> Time Remaining: '+ seconds + '</h3>');
     if (seconds < 1){
         clearInterval(time);
         answered=false; 
@@ -122,29 +124,31 @@ function answerpg (){
     $('.thisChoice').empty(); //clear question
     $('.question').empty();
 
-    var rightAns = triviaQuestions[i].answerList[triviaQuestions[i].answer];
-    var rightAnsIndex = triviaQuestions[i].answer;
-    $('#gif').html('<img src = "assets/images/'+Array[currentQuestion]+'.gif"width = "400px">')
+    var rightAns = triviaQuestions[currentQuestion].answerList[triviaQuestions[currentQuestion].answer];
+    var rightAnsIndex = triviaQuestions[currentQuestion].answer;
+
+
+    $('#gif').html('<img src = "assets/images/gifs/'+gifArray[currentQuestion]+'.gif"width = "400px">')
     //right answer checker (if correct, incorrect, or unanswered)
     if ((userSelect == rightAnsIndex) && (answered=true)){
         correct++;
-        $('#message').html (messages.correct);
+        $('#message').html (alert.correct);
     } else if ((userSelect !== rightAnsIndex) && (answered = true)){
         incorrect++;
-        $('#message').html (messages.incorrect);
-        $('#correctedAnswer').html('The correct answer is: ' + rightAns)
+        $('#message').html (alert.incorrect);
+        $('#correctedAnswer').html(rightAns)
     } else{
         unanswered++;
-        $('#message').html(messages.endTime);
-        $('#correctedAnswer').html ("The correct answer is: "+ rightAns);
+        $('#message').html(alert.endTime);
+        $('#correctedAnswer').html (rightAns);
         answered=true;
     }
 
     if (currentQuestion == (triviaQuestions.length-1)){
-        setTimeout(scoreboard, 5000)
+        setTimeout(scoreboard, 3000)
     } else {
         currentQuestion++; 
-        setTimeout(newQuestion,5000);
+        setTimeout(newQuestion,3000);
     }
 }
 function scoreboard(){
@@ -154,11 +158,11 @@ function scoreboard(){
     $('#gif').empty();
 
     $('#finalMessage').html (alert.finished);
-    $('#correctAnswers').html ("Correct answers: " + correct);
-    $('#incorrectAnswers').html ("Incorrect answers: "+ incorrect);
-    $('#unanswered').html ("Unanswered: "+unanswered);
+    $('#correctAnswer').html ("Correct answers: " + correct);
+    $('#incorrectAnswer').html ("Incorrect answers: "+ incorrect);
+    $('#unanswered').html ("Unanswered: " + unanswered);
     $("#startOver").addClass('reset');
     $('#startOver').show(); 
-    $('#startOver').html ('Start over?');
+    $('#startOver').html ('Start over');
 }
-}
+
